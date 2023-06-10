@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { client } from "../database";
 import { AppError } from "../error";
 
 const verifyPreferredOS = (req: Request, res: Response, next: NextFunction): void => {

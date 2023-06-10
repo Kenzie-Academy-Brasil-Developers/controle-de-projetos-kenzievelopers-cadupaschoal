@@ -27,8 +27,8 @@ developersRouter.delete(
 );
 developersRouter.post(
   "/:id/infos",
-  middlewares.verifyPreferredOS,
   middlewares.verifyIdExists,
+  middlewares.verifyPreferredOS,
   middlewares.verifyInfosExists,
   developersControllers.updateInfos
 );

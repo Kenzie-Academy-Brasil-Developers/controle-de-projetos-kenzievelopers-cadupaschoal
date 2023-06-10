@@ -1,7 +1,8 @@
-import format from 'pg-format';
-import { client } from '../database';
+import format from "pg-format";
+import { client } from "../database";
+import { IProject, IProjectRetrieve, TProjectUpdate } from "../interfaces";
 
-const create = async (payload: any): Promise<any> => {
+const create = async (payload: any): Promise<IProject> => {
     const queyFormat = format(
         `INSERT INTO projects (%I) VALUES (%L) RETURNING *;`,
         Object.keys(payload),
@@ -12,7 +13,7 @@ const create = async (payload: any): Promise<any> => {
     return query.rows[0];
 };
 
-const retrieve = async (projectId: string): Promise<any> => {
+const retrieve = async (projectId: string): Promise<IProjectRetrieve> => {
     const queryString = `SELECT 
     "p"."id" AS "projectId",
     "p"."name" AS "projectName",
@@ -27,8 +28,18 @@ const retrieve = async (projectId: string): Promise<any> => {
     WHERE "p".id = $1
     `;
 
-    const queryResult:any = await client.query(queryString,[projectId]);
+    const queryResult = await client.query(queryString,[projectId]);
     return queryResult.rows[0];
+};
+
+const update = async (payload: Object, projectId: string): Promise<TProjectUpdate> => {
+    const queryFormat = format(
+        "UPDATE projects SET (%I) = ROW(%L) WHERE id = $1 RETURNING *;",
+        Object.keys(payload),
+        Object.values(payload)
+    );
+    const query: any = await client.query(queryFormat,[projectId]);
+    return query.rows[0];
 }
 
-export default { create, retrieve };
+export default { create, retrieve, update };

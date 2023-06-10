@@ -1,6 +1,10 @@
-import format from 'pg-format';
-import { IDevelopers, TDevelopersCreate,TDevelopersResult, TDevelopersUpdate } from '../interfaces';
-import { client } from '../database';
+import format from "pg-format";
+import { IDevelopers, 
+         TDevelopersCreate,
+         TDevelopersResult,
+         TDevelopersUpdate,
+         IDeveloperInfos } from "../interfaces";
+import { client } from "../database";
 
 const create = async (payload: TDevelopersCreate): Promise<IDevelopers> => {
     const queryFormat: string = format(
@@ -47,20 +51,19 @@ const erase = async (developerId: string): Promise<void> => {
     const queryString = "DELETE FROM developers WHERE id = $1;"
     await client.query(queryString,[developerId]);
 
-    return
+    return 
     
 };
 
-const updateInfos = async (payload:object, developerId: string): Promise<any> => {
+const updateInfos = async (payload:object, developerId: string): Promise<IDeveloperInfos> => {
     const formtaedPayload = {...payload, developerId: developerId};
     const queryFormat = format(
        `INSERT INTO "developerInfos"  (%I) VALUES (%L) RETURNING *; `,
        Object.keys(formtaedPayload),
        Object.values(formtaedPayload) 
     );
-    const query: any = await client.query(queryFormat);
-    console.log(query.rows[0]);
+    const query = await client.query(queryFormat);
     return query.rows[0];
 };
 
-export default { create, retrieve, update, erase, updateInfos }
+export default { create, retrieve, update, erase, updateInfos };

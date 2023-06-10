@@ -6,5 +6,6 @@ const projectsRouter = Router();
 
 projectsRouter.post("",middlewares.verifyIdExists,projectsControllers.create);
 projectsRouter.get("/:id",middlewares.verifyIdExists, projectsControllers.retrieve);
+projectsRouter.patch("/:id", middlewares.verifyProjectIdExists, projectsControllers.update);
 
 export default projectsRouter;

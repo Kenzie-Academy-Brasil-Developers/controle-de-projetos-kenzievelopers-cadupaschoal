@@ -1,9 +1,8 @@
 import "express-async-errors"
 import "dotenv/config";
 import express, { Application } from "express";
-import { developersRouter } from "./routers";
+import { developersRouter,projectsRouter } from "./routers";
 import middlewares from "./middlewares";
-import projectsRouter from "./routers/projects.routes";
 
 const app: Application = express();
 app.use(express.json());
